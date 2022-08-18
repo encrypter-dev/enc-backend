@@ -1,13 +1,13 @@
-package com.encrypter.enc.backend;
+package com.encrypter.enc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EncBackendApplication {
+public class EncApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EncBackendApplication.class, args);
+        SpringApplication.run(EncApplication.class, args);
     }
 
 }
