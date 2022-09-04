@@ -4,4 +4,5 @@ public interface GlobalConstants {
 
     String RESPONSE_SUCCESS = "success";
     String RESPONSE_FAILED = "Action Failed!";
+    String ENC_DATA_DRIVE_FOLDER = "enc-data";
 }
