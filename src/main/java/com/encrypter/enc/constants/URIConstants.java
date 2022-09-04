@@ -9,4 +9,5 @@ public interface URIConstants {
     String GOOGLE_SIGN_IN = "/google/sign-in";
     String GOOGLE_OAUTH = "/google/oauth";
     String AUTH_STATUS = "/auth-status";
+    String UPLOAD_FILE = "/upload-file";
 }
