@@ -68,16 +68,9 @@ public class GoogleDriveService {
      * @throws IOException This is thrown in case of any error
      */
     public Boolean isUserAuthenticated() throws IOException {
-        Boolean isUserAuthenticated = Boolean.FALSE;
         GoogleAuthorizationCodeFlow googleAuthorizationCodeFlow = googleAuthorizationUtil.getGoogleAuthorizationCodeFlow();
         Credential credential = googleAuthorizationCodeFlow.loadCredential(USER_IDENTIFIER_KEY);
-        if (Objects.nonNull(credential)) {
-            boolean tokenValid = credential.refreshToken();
-            if (tokenValid) {
-                isUserAuthenticated = Boolean.TRUE;
-            }
-        }
-        return isUserAuthenticated;
+        return Objects.nonNull(credential) && credential.refreshToken();
     }
 
     /**
