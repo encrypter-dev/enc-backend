@@ -103,7 +103,7 @@ public class GoogleDriveService {
      * @throws IOException in case there's any error while uploading the file.
      */
     public String uploadFile(MultipartFile file) throws IOException {
-        log.info("FILE_UPLOAD_REQUEST: for file type: {}, file size: {} bytes", file.getContentType(), file.getSize());
+        log.info("FILE_UPLOAD_REQUEST: FOR_FILE_TYPE: {}, FILE_SIZE: {} BYTES", file.getContentType(), file.getSize());
         Credential credential = googleAuthorizationUtil.getGoogleAuthorizationCodeFlow().loadCredential(USER_IDENTIFIER_KEY);
         Drive drive = new Drive.Builder(googleAuthorizationUtil.getHttpTransport(), googleAuthorizationUtil.getJsonFactory(), credential)
                 .setApplicationName(applicationName).build();
@@ -114,14 +114,14 @@ public class GoogleDriveService {
         googleFile.setParents(Collections.singletonList(getUserFolderId()));
 
         java.io.File javaFile = new java.io.File(file.getName());
-        FileOutputStream fileOutputStream = new FileOutputStream(javaFile);
-        fileOutputStream.write(file.getBytes());
-        fileOutputStream.close();
+        try (FileOutputStream fileOutputStream = new FileOutputStream(javaFile)) {
+            fileOutputStream.write(file.getBytes());
+        }
 
         FileContent fileContent = new FileContent(file.getContentType(), javaFile);
         File uploadedFile = drive.files().create(googleFile, fileContent).setFields("id, parents").execute();
 
-        log.info("FILE_UPLOADED_TO_DRIVE: for user: {}, fileID: {}", USER_IDENTIFIER_KEY, uploadedFile.getId());
+        log.info("FILE_UPLOADED_TO_DRIVE: FOR_USER: {}, FILE_ID: {}", USER_IDENTIFIER_KEY, uploadedFile.getId());
         return uploadedFile.getId();
     }
 
@@ -132,7 +132,7 @@ public class GoogleDriveService {
      * @throws IOException in case there's any error while fetching/uploading the folder.
      */
     private String getUserFolderId() throws IOException {
-        log.info("GET_FOLDER_REQUEST: for user: {}", USER_IDENTIFIER_KEY);
+        log.info("GET_FOLDER_REQUEST: FOR_USER: {}", USER_IDENTIFIER_KEY);
         Credential credential = googleAuthorizationUtil.getGoogleAuthorizationCodeFlow().loadCredential(USER_IDENTIFIER_KEY);
         Drive drive = new Drive.Builder(googleAuthorizationUtil.getHttpTransport(), googleAuthorizationUtil.getJsonFactory(), credential)
                 .setApplicationName(applicationName).build();
@@ -143,18 +143,18 @@ public class GoogleDriveService {
 
         for (File file : fileList.getFiles()) {
             if (file.getName().equals(GlobalConstants.ENC_DATA_DRIVE_FOLDER)) {
-                log.info("FOUND_FOLDER: for user: {}, folderId: {}", USER_IDENTIFIER_KEY, file.getId());
+                log.info("FOUND_FOLDER: FOR_USER: {}, FOLDER_ID: {}", USER_IDENTIFIER_KEY, file.getId());
                 return file.getId();
             }
         }
 
-        log.info("FOLDER_NOT_FOUND_CREATING_NEW_FOLDER: for user: {}", USER_IDENTIFIER_KEY);
+        log.info("FOLDER_NOT_FOUND_CREATING_NEW_FOLDER: FOR_USER: {}", USER_IDENTIFIER_KEY);
         File googleFolder = new File();
         googleFolder.setName(GlobalConstants.ENC_DATA_DRIVE_FOLDER);
         googleFolder.setMimeType(FileMimeTypes.GOOGLE_FOLDER);
 
         File uploadedFolder = drive.files().create(googleFolder).setFields("id").execute();
-        log.info("FOLDER_CREATED: for user: {}, folderID: {}", USER_IDENTIFIER_KEY, uploadedFolder.getId());
+        log.info("FOLDER_CREATED: FOR_USER: {}, FOLDER_ID: {}", USER_IDENTIFIER_KEY, uploadedFolder.getId());
         return uploadedFolder.getId();
     }
 }

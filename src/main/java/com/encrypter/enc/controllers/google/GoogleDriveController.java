@@ -1,5 +1,6 @@
 package com.encrypter.enc.controllers.google;
 
+import com.encrypter.enc.constants.GlobalConstants;
 import com.encrypter.enc.constants.URIConstants;
 import com.encrypter.enc.controllers.ApiV1Controller;
 import com.encrypter.enc.dto.ResponseDTO;
@@ -29,7 +30,7 @@ public class GoogleDriveController extends ApiV1Controller {
      * @return ID of the uploaded file
      * @throws IOException in case of any errors while uploading the file.
      */
-    @PostMapping(URIConstants.UPLOAD_FILE)
+    @PostMapping(name = URIConstants.UPLOAD_FILE, consumes = GlobalConstants.MULTIPART_FORM_DATA)
     public ResponseDTO<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
         return new ResponseDTO<>(googleDriveService.uploadFile(file));
     }
