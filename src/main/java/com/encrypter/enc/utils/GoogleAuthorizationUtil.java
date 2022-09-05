@@ -47,6 +47,14 @@ public class GoogleAuthorizationUtil {
         return callBackUri;
     }
 
+    public HttpTransport getHttpTransport() {
+        return HTTP_TRANSPORT;
+    }
+
+    public JsonFactory getJsonFactory() {
+        return JSON_FACTORY;
+    }
+
     @PostConstruct
     public void createGoogleAuthorizationCodeFlow() throws IOException {
         GoogleClientSecrets secrets = GoogleClientSecrets.load(JSON_FACTORY,
